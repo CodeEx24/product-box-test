@@ -1,7 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Box,
   Button,
@@ -9,7 +8,6 @@ import {
   CircularProgress,
   FormControl,
   IconButton,
-  Menu,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -26,7 +24,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { EmptyBox } from "../assets/svg/ExmptyBox";
 import { Product, ProductSelection } from "../types";
 interface ProductSelectorProps {
@@ -48,7 +46,6 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleAddProduct = () => {
     if (selectedProducts.length >= maxProducts) return;
@@ -65,11 +62,6 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
       ]);
     }
   };
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleMenuClose = () => setAnchorEl(null);
 
   const handleRemoveProduct = (index: number) => {
     const newProducts = [...selectedProducts];
@@ -107,29 +99,15 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
     const product = products.find((p) => p.id === productId);
     return product
       ? {
-          dimensions: `${product.length}x${product.width}x${product.height} cm`,
-          weight: `${product.weight} kg`,
+          dimensions: `${product.length}x${product.width}x${product.height}cm`,
+          weight: `${product.weight}kg`,
         }
       : { dimensions: "", weight: "" };
   };
 
   return (
-    <Box
-      sx={{
-        p: { xs: 2, sm: 3 },
-        position: "relative",
-        backgroundColor: "#0F1523",
-        borderRadius: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
+    <Box className="product-selector-container">
+      <Box className="product-selector-container-box">
         <Typography variant="h6" component="h2">
           Select Products
         </Typography>
@@ -143,30 +121,13 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
       </Box>
 
       <Stack spacing={3}>
-        {" "}
-        <TableContainer
-          component="div"
-          sx={{
-            "&::-webkit-scrollbar": {
-              width: "10px",
-              height: "6px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "hsl(217.2, 91.2%, 59.8%)",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "hsl(222.2, 84%, 4.9%)",
-            },
-          }}
-        >
-          {" "}
+        <TableContainer component="div" className="custom-scrollbar">
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell
                   sx={{
-                    width: { xs: "150px", sm: "300px" },
+                    width: { xs: "400px", sm: "300px" },
                     fontWeight: "bold",
                   }}
                 >
@@ -174,7 +135,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
                 </TableCell>
                 <TableCell
                   sx={{
-                    width: { xs: "100px", sm: "100px" },
+                    width: { xs: "200px", sm: "400px" },
                     fontWeight: "bold",
                   }}
                 >
@@ -187,7 +148,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
                 </TableCell>
                 <TableCell
                   sx={{
-                    width: { xs: "150px", sm: "200px" },
+                    width: { xs: "120px", sm: "120px" },
                     fontWeight: "bold",
                   }}
                 >
@@ -282,17 +243,9 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
                         </FormControl>
                       </TableCell>
 
-                      <TableCell>
-                        <Typography variant="body2">
-                          {productDetails.dimensions}
-                        </Typography>
-                      </TableCell>
+                      <TableCell>{productDetails.dimensions}</TableCell>
 
-                      <TableCell>
-                        <Typography variant="body2">
-                          {productDetails.weight}
-                        </Typography>
-                      </TableCell>
+                      <TableCell>{productDetails.weight}</TableCell>
 
                       <TableCell>
                         <TextField
@@ -314,34 +267,22 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
                               : ""
                           }
                           fullWidth
+                          sx={{
+                            width: { xs: "90px", sm: "120px" },
+                          }}
                         />
                       </TableCell>
 
                       <TableCell>
-                        <Tooltip title="More options" aria-label="More options">
+                        <Tooltip title="Remove item" aria-label="Remove Item">
                           <IconButton
-                            onClick={handleMenuOpen}
-                            color="inherit"
+                            onClick={() => handleRemoveProduct(index)}
+                            color="error"
                             size="small"
                           >
-                            <MoreVertIcon />
+                            <DeleteIcon />
                           </IconButton>
                         </Tooltip>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleMenuClose}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              handleRemoveProduct(index);
-                              handleMenuClose();
-                            }}
-                            sx={{ width: 150 }}
-                          >
-                            Delete
-                          </MenuItem>
-                        </Menu>
                         <Tooltip title={productDetails.dimensions}>
                           <InfoIcon
                             sx={{

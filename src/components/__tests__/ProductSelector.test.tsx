@@ -101,13 +101,13 @@ describe("ProductSelector Component", () => {
       />,
     );
 
-    // Open the menu by clicking the "More options" icon button
-    fireEvent.click(screen.getByLabelText("More options"));
+    const deleteButton = screen.getByRole("button", {
+      name: /remove item/i,
+    });
 
-    // Click on the "Delete" option in the menu
-    fireEvent.click(screen.getByText("Delete"));
+    fireEvent.click(deleteButton);
 
-    expect(mockOnProductsChange).toHaveBeenCalledWith([]); // Ensure that the onProductsChange is called with the updated state
+    expect(mockOnProductsChange).toHaveBeenCalledWith([]);
   });
 
   it("should clear all selected products when Clear Items button is clicked", () => {

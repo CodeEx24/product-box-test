@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { MainBox } from "./assets/svg/MainBox";
 import { PackingResults, ProductSelector } from "./components";
+import { MAX_PRODUCT } from "./constants/maxProduct";
 import { boxes, products } from "./data";
 import { appTheme } from "./theme";
 import {
@@ -150,7 +151,7 @@ export default function App() {
                     products={products as Product[]}
                     selectedProducts={selectedProducts}
                     onProductsChange={setSelectedProducts}
-                    maxProducts={10}
+                    maxProducts={MAX_PRODUCT}
                     handlePack={handlePack}
                     isCalculating={isCalculating}
                   />
@@ -164,21 +165,11 @@ export default function App() {
                     sx={{
                       mt: 3,
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: "flex-end",
                       gap: 2,
                       flexDirection: { xs: "column", sm: "row" },
                     }}
                   >
-                    <Button
-                      variant="outlined"
-                      onClick={handleGoBack}
-                      size={isMobile ? "large" : "medium"}
-                      sx={{
-                        minWidth: { xs: "100%", sm: "200px" },
-                      }}
-                    >
-                      Go Back
-                    </Button>
                     <Button
                       variant="contained"
                       onClick={() => reactToPrintFn()}
@@ -188,6 +179,16 @@ export default function App() {
                       }}
                     >
                       Print Results
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={handleGoBack}
+                      size={isMobile ? "large" : "medium"}
+                      sx={{
+                        minWidth: { xs: "100%", sm: "200px" },
+                      }}
+                    >
+                      Go Back
                     </Button>
                   </Box>
                 </Box>
